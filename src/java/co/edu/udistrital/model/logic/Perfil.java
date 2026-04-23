@@ -27,11 +27,14 @@ public abstract class Perfil {
         this.usuario = usuario;
         this.contrasena = contrasena;
     }
-    
+
     /**
      * Constructor para settear elementos.
      */
-    public Perfil(){};
+    public Perfil() {
+    }
+
+    ;
 
     public String getUsuario() {
         return usuario;
@@ -48,5 +51,5 @@ public abstract class Perfil {
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
-    
+
 }
