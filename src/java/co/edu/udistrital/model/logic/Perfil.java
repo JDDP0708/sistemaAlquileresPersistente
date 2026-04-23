@@ -36,18 +36,38 @@ public abstract class Perfil {
 
     ;
 
+    /**
+     * Obtiene el nombre de usuario.
+     *
+     * @return Nombre de usuario.
+     */
     public String getUsuario() {
         return usuario;
     }
 
+    /**
+     * Establece el nombre de usuario.
+     *
+     * @param usuario Nuevo nombre de usuario.
+     */
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
 
+    /**
+     * Obtiene la contraseña del usuario.
+     *
+     * @return Contraseña del usuario.
+     */
     public String getContrasena() {
         return contrasena;
     }
 
+    /**
+     * Establece la contraseña del usuario.
+     *
+     * @param contrasena Nueva contraseña.
+     */
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }

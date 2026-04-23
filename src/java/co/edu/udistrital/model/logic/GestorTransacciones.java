@@ -53,18 +53,38 @@ public class GestorTransacciones {
         return true;
     }
 
+    /**
+     * Obtiene el repositorio de usuarios.
+     *
+     * @return Repositorio de usuarios.
+     */
     public UsuarioRepository getUsuarioRepo() {
         return usuarioRepo;
     }
 
+    /**
+     * Establece el repositorio de usuarios.
+     *
+     * @param usuarioRepo Nuevo repositorio de usuarios.
+     */
     public void setUsuarioRepo(UsuarioRepository usuarioRepo) {
         this.usuarioRepo = usuarioRepo;
     }
 
+    /**
+     * Obtiene la calculadora de alquileres.
+     *
+     * @return Calculadora configurada.
+     */
     public CalculadoraAlquiler getCalculadora() {
         return calculadora;
     }
 
+    /**
+     * Establece la calculadora de alquileres.
+     *
+     * @param calculadora Nueva calculadora.
+     */
     public void setCalculadora(CalculadoraAlquiler calculadora) {
         this.calculadora = calculadora;
     }

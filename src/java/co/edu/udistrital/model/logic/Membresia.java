@@ -44,34 +44,74 @@ public class Membresia {
         return precioBase - (precioBase * porcentajeDescuento);
     }
 
+    /**
+     * Obtiene el identificador de la membresía.
+     *
+     * @return Identificador único en base de datos.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Establece el identificador de la membresía.
+     *
+     * @param id Nuevo identificador.
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Obtiene el nombre comercial de la membresía.
+     *
+     * @return Nombre (ej. GOLD, PREMIUM).
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Establece el nombre comercial de la membresía.
+     *
+     * @param nombre Nuevo nombre.
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * Obtiene el porcentaje de descuento de la membresía.
+     *
+     * @return Porcentaje de descuento aplicable.
+     */
     public double getPorcentajeDescuento() {
         return porcentajeDescuento;
     }
 
+    /**
+     * Establece el porcentaje de descuento de la membresía.
+     *
+     * @param porcentajeDescuento Nuevo porcentaje.
+     */
     public void setPorcentajeDescuento(double porcentajeDescuento) {
         this.porcentajeDescuento = porcentajeDescuento;
     }
 
+    /**
+     * Obtiene el costo de cambio a esta membresía.
+     *
+     * @return Costo asociado al cambio.
+     */
     public double getCostoCambio() {
         return costoCambio;
     }
 
+    /**
+     * Establece el costo de cambio a esta membresía.
+     *
+     * @param costoCambio Nuevo costo de cambio.
+     */
     public void setCostoCambio(double costoCambio) {
         this.costoCambio = costoCambio;
     }

@@ -43,42 +43,92 @@ public abstract class Producto {
     public Producto() {
     }
 
+    /**
+     * Obtiene el identificador del producto.
+     *
+     * @return Identificador único.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Establece el identificador del producto.
+     *
+     * @param id Nuevo identificador.
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Obtiene el nombre o título del producto.
+     *
+     * @return Nombre del producto.
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Establece el nombre del producto.
+     *
+     * @param nombre Nuevo nombre.
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * Obtiene el formato del producto.
+     *
+     * @return Formato (DVD, BluRay, Físico, Digital, etc.).
+     */
     public String getFormato() {
         return formato;
     }
 
+    /**
+     * Establece el formato del producto.
+     *
+     * @param formato Nuevo formato.
+     */
     public void setFormato(String formato) {
         this.formato = formato;
     }
 
+    /**
+     * Obtiene el costo por día del alquiler.
+     *
+     * @return Valor base por día.
+     */
     public double getCostoDia() {
         return costoDia;
     }
 
+    /**
+     * Establece el costo por día del alquiler.
+     *
+     * @param costoDia Nuevo costo diario.
+     */
     public void setCostoDia(double costoDia) {
         this.costoDia = costoDia;
     }
 
+    /**
+     * Obtiene la cantidad disponible en stock.
+     *
+     * @return Número de unidades disponibles.
+     */
     public int getStock() {
         return stock;
     }
 
+    /**
+     * Establece la cantidad disponible en stock.
+     *
+     * @param stock Nuevas unidades disponibles.
+     */
     public void setStock(int stock) {
         this.stock = stock;
     }

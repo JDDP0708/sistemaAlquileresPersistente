@@ -42,18 +42,38 @@ public class Cliente extends Perfil {
         this.saldo -= monto;
     }
 
+    /**
+     * Obtiene el saldo actual del cliente.
+     *
+     * @return Saldo disponible.
+     */
     public double getSaldo() {
         return saldo;
     }
 
+    /**
+     * Establece el saldo del cliente.
+     *
+     * @param saldo Nuevo saldo.
+     */
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 
+    /**
+     * Obtiene la membresía asociada al cliente.
+     *
+     * @return Membresía actual.
+     */
     public Membresia getMembresia() {
         return membresia;
     }
 
+    /**
+     * Establece la membresía del cliente.
+     *
+     * @param membresia Nueva membresía.
+     */
     public void setMembresia(Membresia membresia) {
         this.membresia = membresia;
     }

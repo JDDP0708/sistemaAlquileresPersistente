@@ -37,10 +37,20 @@ public class Videojuego extends Producto {
     public Videojuego() {
     }
 
+    /**
+     * Obtiene la plataforma compatible del videojuego.
+     *
+     * @return Consola compatible (ej. PlayStation, Xbox, Nintendo).
+     */
     public String getPlataforma() {
         return plataforma;
     }
 
+    /**
+     * Establece la plataforma compatible del videojuego.
+     *
+     * @param plataforma Nueva plataforma.
+     */
     public void setPlataforma(String plataforma) {
         this.plataforma = plataforma;
     }

@@ -37,10 +37,20 @@ public class Pelicula extends Producto {
     public Pelicula() {
     }
 
+    /**
+     * Obtiene la duración de la película.
+     *
+     * @return Duración en formato de texto (ej. "120 min").
+     */
     public String getDuracion() {
         return duracion;
     }
 
+    /**
+     * Establece la duración de la película.
+     *
+     * @param duracion Nueva duración.
+     */
     public void setDuracion(String duracion) {
         this.duracion = duracion;
     }
