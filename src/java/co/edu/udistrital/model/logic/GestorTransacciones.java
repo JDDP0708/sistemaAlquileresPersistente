@@ -6,7 +6,7 @@
  */
 package co.edu.udistrital.model.logic;
 
-import services.UsuarioRepository;
+import co.edu.udistrital.model.services.UsuarioRepository;
 
 /**
  * Orquestador principal que coordina alquileres y devoluciones.
@@ -15,6 +15,7 @@ import services.UsuarioRepository;
  * @version 1.0
  */
 public class GestorTransacciones {
+
     private UsuarioRepository usuarioRepo;
     private CalculadoraAlquiler calculadora;
 
@@ -28,6 +29,7 @@ public class GestorTransacciones {
 
     /**
      * Valida y ejecuta el préstamo de un ítem.
+     *
      * @param p Producto solicitado.
      * @param c Cliente solicitante.
      * @param dias Días pactados.
@@ -48,7 +50,7 @@ public class GestorTransacciones {
         c.descontarSaldo(total);
         p.setStock(p.getStock() - 1);
 
-        return true; 
+        return true;
     }
 
     public UsuarioRepository getUsuarioRepo() {

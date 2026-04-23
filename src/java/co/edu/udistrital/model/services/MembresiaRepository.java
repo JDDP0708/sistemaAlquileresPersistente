@@ -1,8 +1,8 @@
 /*
-* @(#)MembresiaRepository.java 1.0 21/04/2026
-*
-* Copyright(C) Juan David Díaz Pérez
-*
+ * @(#)MembresiaRepository.java 1.0 21/04/2026
+ *
+ * Copyright(C) Juan David Díaz Pérez
+ *
  */
 package co.edu.udistrital.model.services;
 
@@ -12,18 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Repositorio con los CRUD para la tabla membresia
+ * DAO para administrar membresias.
  *
  * @author Juan David Díaz Pérez
  * @version 1.0
  */
 public class MembresiaRepository extends BareRepository<Membresia> {
 
+    /**
+     * Recupera una membresía usando su ID físico.
+     *
+     * @param id String parseable a entero.
+     * @return Objeto hidratado.
+     */
     @Override
     public Membresia getById(String id) {
         String sql = "SELECT * FROM membresias WHERE id = ?";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-
             ps.setInt(1, Integer.parseInt(id));
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -36,11 +41,16 @@ public class MembresiaRepository extends BareRepository<Membresia> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Excepción: " + e.getMessage());
         }
         return null;
     }
 
+    /**
+     * Extrae todas las membresías activas.
+     *
+     * @return Listado de configuración.
+     */
     @Override
     public List<Membresia> getAll() {
         List<Membresia> lista = new ArrayList<>();
@@ -55,24 +65,17 @@ public class MembresiaRepository extends BareRepository<Membresia> {
                 ));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Excepción: " + e.getMessage());
         }
         return lista;
     }
 
-    // Implementar add, update y delete según sea necesario...
+    /**
+     * @param entity Membresía a guardar.
+     * @return Booleano.
+     */
     @Override
     public boolean add(Membresia entity) {
-        return false;
-    }
-
-    @Override
-    public boolean update(Membresia entity) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(String id) {
         return false;
     }
 }
