@@ -12,71 +12,92 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO especializado en inventario polimórfico.
+ * Repositorio de Inventario. Soporta Single Table Inheritance (STI).
  *
  * @author Juan David Díaz Pérez
  * @version 1.0
  */
 public class ProductoRepository extends BareRepository<Producto> {
 
-    /**
-     * Recupera el catálogo, discriminando constructores.
-     *
-     * @return Catálogo mezclado.
-     */
+    @Override
+    public boolean add(Producto entity) {
+        String sql = "INSERT INTO productos (nombre, costo_dia, stock, tipo_producto, formato, duracion, plataforma) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, entity.getNombre());
+            ps.setDouble(2, entity.getCostoDia());
+            ps.setInt(3, entity.getStock());
+            ps.setString(5, entity.getFormato());
+
+            if (entity instanceof Pelicula) {
+                ps.setString(4, "PELICULA");
+                ps.setString(6, ((Pelicula) entity).getDuracion());
+                ps.setNull(7, Types.VARCHAR);
+            } else if (entity instanceof Videojuego) {
+                ps.setString(4, "JUEGO");
+                ps.setNull(6, Types.VARCHAR);
+                ps.setString(7, ((Videojuego) entity).getPlataforma());
+            }
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en Producto.add: " + e.getMessage());
+            return false;
+        }
+    }
+
     @Override
     public List<Producto> getAll() {
         List<Producto> productos = new ArrayList<>();
         String sql = "SELECT * FROM productos";
-
         try (Connection con = getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-
             while (rs.next()) {
                 String tipo = rs.getString("tipo_producto");
-                Producto p;
-
                 if ("PELICULA".equals(tipo)) {
-                    p = new Pelicula(
-                            rs.getInt("id"),
-                            rs.getString("nombre"),
-                            rs.getString("formato"),
-                            rs.getDouble("costo_dia"),
-                            rs.getInt("stock"),
-                            rs.getString("duracion")
-                    );
+                    productos.add(new Pelicula(rs.getInt("id"), rs.getString("nombre"), rs.getString("formato"), rs.getDouble("costo_dia"), rs.getInt("stock"), rs.getString("duracion")));
                 } else {
-                    p = new Videojuego(
-                            rs.getInt("id"),
-                            rs.getString("nombre"),
-                            rs.getString("formato"),
-                            rs.getDouble("costo_dia"),
-                            rs.getInt("stock"),
-                            rs.getString("plataforma")
-                    );
+                    productos.add(new Videojuego(rs.getInt("id"), rs.getString("nombre"), rs.getString("formato"), rs.getDouble("costo_dia"), rs.getInt("stock"), rs.getString("plataforma")));
                 }
-                productos.add(p);
             }
         } catch (SQLException e) {
-            System.err.println("Excepción: " + e.getMessage());
+            System.err.println("Error en Producto.getAll: " + e.getMessage());
         }
         return productos;
     }
 
-    /**
-     * @param entity Producto a ingresar.
-     * @return Booleano.
-     */
-    @Override
-    public boolean add(Producto entity) {
-        return false;
-    }
-
-    /**
-     * @param id ID único.
-     * @return Producto unitario.
-     */
     @Override
     public Producto getById(String id) {
+        String sql = "SELECT * FROM productos WHERE id = ?";
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(id));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    if ("PELICULA".equals(rs.getString("tipo_producto"))) {
+                        return new Pelicula(rs.getInt("id"), rs.getString("nombre"), rs.getString("formato"), rs.getDouble("costo_dia"), rs.getInt("stock"), rs.getString("duracion"));
+                    } else {
+                        return new Videojuego(rs.getInt("id"), rs.getString("nombre"), rs.getString("formato"), rs.getDouble("costo_dia"), rs.getInt("stock"), rs.getString("plataforma"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en Producto.getById: " + e.getMessage());
+        }
         return null;
     }
+
+    @Override
+    public boolean update(Producto entity) {
+        String sql = "UPDATE productos SET stock = ? WHERE id = ?";
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, entity.getStock());
+            ps.setInt(2, entity.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en Producto.update: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(String id) {
+        return false;
+        /* No recomendado borrar productos físicos, mejor cambiar stock a 0 */ }
 }

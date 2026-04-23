@@ -12,19 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO para administrar membresias.
+ * Repositorio encargado de gestionar los beneficios y tipos de membresía.
  *
  * @author Juan David Díaz Pérez
  * @version 1.0
  */
 public class MembresiaRepository extends BareRepository<Membresia> {
 
-    /**
-     * Recupera una membresía usando su ID físico.
-     *
-     * @param id String parseable a entero.
-     * @return Objeto hidratado.
-     */
+    @Override
+    public boolean add(Membresia entity) {
+        String sql = "INSERT INTO membresias (nombre, porcentaje_descuento, costo_cambio) VALUES (?, ?, ?)";
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, entity.getNombre());
+            ps.setDouble(2, entity.getPorcentajeDescuento());
+            ps.setDouble(3, entity.getCostoCambio());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en Membresia.add: " + e.getMessage());
+            return false;
+        }
+    }
+
     @Override
     public Membresia getById(String id) {
         String sql = "SELECT * FROM membresias WHERE id = ?";
@@ -32,50 +40,44 @@ public class MembresiaRepository extends BareRepository<Membresia> {
             ps.setInt(1, Integer.parseInt(id));
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Membresia(
-                            rs.getInt("id"),
-                            rs.getString("nombre"),
-                            rs.getDouble("porcentaje_descuento"),
-                            rs.getDouble("costo_cambio")
-                    );
+                    return new Membresia(rs.getInt("id"), rs.getString("nombre"), rs.getDouble("porcentaje_descuento"), rs.getDouble("costo_cambio"));
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Excepción: " + e.getMessage());
+            System.err.println("Error en Membresia.getById: " + e.getMessage());
         }
         return null;
     }
 
-    /**
-     * Extrae todas las membresías activas.
-     *
-     * @return Listado de configuración.
-     */
     @Override
     public List<Membresia> getAll() {
         List<Membresia> lista = new ArrayList<>();
         String sql = "SELECT * FROM membresias";
         try (Connection con = getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                lista.add(new Membresia(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getDouble("porcentaje_descuento"),
-                        rs.getDouble("costo_cambio")
-                ));
+                lista.add(new Membresia(rs.getInt("id"), rs.getString("nombre"), rs.getDouble("porcentaje_descuento"), rs.getDouble("costo_cambio")));
             }
         } catch (SQLException e) {
-            System.err.println("Excepción: " + e.getMessage());
+            System.err.println("Error en Membresia.getAll: " + e.getMessage());
         }
         return lista;
     }
 
-    /**
-     * @param entity Membresía a guardar.
-     * @return Booleano.
-     */
     @Override
-    public boolean add(Membresia entity) {
+    public boolean update(Membresia entity) {
+        // Implementación requerida solo si se van a editar membresías existentes
         return false;
+    }
+
+    @Override
+    public boolean delete(String id) {
+        String sql = "DELETE FROM membresias WHERE id = ?";
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(id));
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en Membresia.delete: " + e.getMessage());
+            return false;
+        }
     }
 }

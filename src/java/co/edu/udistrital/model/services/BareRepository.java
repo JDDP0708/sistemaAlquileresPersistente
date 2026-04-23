@@ -12,55 +12,68 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Repositorio base que va a ser heredada para seguir los DAO
+ * Clase base abstracta que define el contrato de persistencia de datos. Aplica
+ * el Principio de Responsabilidad Única (SRP) y DRY.
  *
  * @author Juan David Díaz Pérez
  * @version 1.0
- * @param <T> Clase que mapea el repositorio.
+ * @param <T> Tipo de entidad genérica que maneja el repositorio.
  */
 public abstract class BareRepository<T> {
 
     /**
-     * Constructor vacío.
-     */
-    public BareRepository() {
-    }
-
-    /**
-     * Provee el puente de datos hacia MariaDB.
+     * Obtiene una conexión activa a la base de datos MariaDB. Diseñado para
+     * usarse dentro de bloques Try-with-Resources.
      *
-     * @return Conexión activa a base de datos.
-     * @throws SQLException Falla de credenciales o red.
+     * @return Connection Objeto de conexión JDBC.
+     * @throws SQLException Si hay un error de red o credenciales.
      */
     protected Connection getConnection() throws SQLException {
         try {
             Class.forName(Config.DRIVER);
         } catch (ClassNotFoundException e) {
-            throw new SQLException("Driver ausente.", e);
+            throw new SQLException("Driver MariaDB no encontrado.", e);
         }
         return DriverManager.getConnection(Config.URL, Config.USER, Config.PASS);
     }
 
     /**
-     * Persiste una entidad.
+     * Agrega un nuevo registro a la base de datos.
      *
-     * @param entity Objeto mapeado.
-     * @return Estado del registro.
+     * @param entity Entidad a persistir.
+     * @return Verdadero si se guardó exitosamente.
      */
     public abstract boolean add(T entity);
 
     /**
-     * Consulta única por llave primaria.
+     * Obtiene un registro por su identificador primario.
      *
-     * @param id Llave de búsqueda.
-     * @return Entidad extraída.
+     * @param id Llave primaria (puede ser numérico en formato String o el
+     * Username).
+     * @return Entidad encontrada o null.
      */
     public abstract T getById(String id);
 
     /**
-     * Extracción general de registros.
+     * Obtiene todos los registros de una tabla.
      *
-     * @return Colección de entidades.
+     * @return Lista de entidades.
      */
     public abstract List<T> getAll();
+
+    /**
+     * Actualiza un registro existente.
+     *
+     * @param entity Entidad con los datos nuevos.
+     * @return Verdadero si se actualizó.
+     */
+    public abstract boolean update(T entity);
+
+    /**
+     * Elimina un registro por su llave primaria.
+     *
+     * @param id Llave primaria del registro.
+     * @return Verdadero si se eliminó.
+     */
+    public abstract boolean delete(String id);
 }
