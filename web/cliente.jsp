@@ -16,7 +16,7 @@
     MembresiaRepository memRepo = new MembresiaRepository();
     AlquilerRepository alqRepo = new AlquilerRepository();
 
-    // 3. Carga de datos dinámicos
+    // 3. Carga de datos dinámicos (Usando getUsuario() según tu modelo Perfil)
     List<Producto> catalogo = prodRepo.getAll();
     List<Membresia> membresias = memRepo.getAll();
     List<Alquiler> misAlquileres = alqRepo.getByCustomer(cliente.getUsuario());
@@ -30,7 +30,8 @@
     </head>
     <body>
         <div class="container">
-            <%-- MÓDULO 1 Y 2: Información Básica y Recarga --%>
+
+            <%-- CABECERA: Perfil y Recarga --%>
             <header class="header-client card">
                 <div class="user-info">
                     <h2>Bienvenido, <%= cliente.getUsuario()%></h2>
@@ -51,18 +52,18 @@
             </header>
 
             <div class="main-grid">
+
+                <%-- LATERAL: Membresía y Alquileres Activos --%>
                 <aside class="sidebar">
-                    <%-- MÓDULO 3: Cambio de Membresía --%>
                     <div class="card section">
                         <h3>Mejorar Membresía</h3>
-                        <p class="text-small">Obtenga mayores descuentos en sus alquileres.</p>
                         <form action="CambiarMembresiaServlet" method="POST" class="form-vertical">
                             <label>Seleccione Nivel:</label>
                             <select name="nuevaMemId" required>
                                 <% for (Membresia m : membresias) {%>
                                 <option value="<%= m.getId()%>" 
-                                        <%= m.getId() == cliente.getMembresia().getId() ? "disabled" : ""%>>
-                                    <%= m.getNombre()%> (<%= (int) (m.getPorcentajeDescuento() * 100)%>% Desc. | Costo: $<%= m.getCostoCambio()%>)
+                                        <%= m.getId() == cliente.getMembresia().getId() ? "disabled selected" : ""%>>
+                                    <%= m.getNombre()%> (<%= (int) (m.getPorcentajeDescuento() * 100)%>% Desc.)
                                 </option>
                                 <% } %>
                             </select>
@@ -70,29 +71,28 @@
                         </form>
                     </div>
 
-                    <%-- MÓDULO 5: Productos Alquilados --%>
-                    <div class="card section" style="margin-top: 3%;">
+                    <div class="card section" style="margin-top: 20px;">
                         <h3>Mis Alquileres Activos</h3>
                         <div class="rented-list">
                             <% if (misAlquileres.isEmpty()) { %>
-                            <p class="empty-msg">No tiene productos alquilados actualmente.</p>
+                            <p class="empty-msg">No tienes productos alquilados.</p>
                             <% } else { %>
                             <table class="styled-table mini">
                                 <thead>
-                                    <tr><th>Producto</th><th>Estado</th><th>Acción</th></tr>
+                                    <tr>
+                                        <th>ID Producto</th>
+                                        <th>Acción</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                    <% for (Alquiler a : misAlquileres) {
-                                            String fDevId = "fDev" + a.getId();
-                                    %>
+                                    <% for (Alquiler a : misAlquileres) {%>
                                     <tr>
-                                        <td>ID: <%= a.getIdProducto()%></td>
-                                        <td><span class="tag-active"><%= a.getEstado()%></span></td>
+                                        <td>Producto #<%= a.getIdProducto()%></td>
                                         <td>
-                                            <form id="<%= fDevId%>" action="DevolverServlet" method="POST" style="display:none;">
+                                            <form action="DevolverServlet" method="POST" style="margin: 0;">
                                                 <input type="hidden" name="idAlquiler" value="<%= a.getId()%>">
+                                                <button type="submit" class="btn-delete">Devolver</button>
                                             </form>
-                                            <button type="submit" form="<%= fDevId%>" class="btn-delete">Devolver</button>
                                         </td>
                                     </tr>
                                     <% } %>
@@ -103,6 +103,7 @@
                     </div>
                 </aside>
 
+                <%-- CONTENIDO: Catálogo de Productos --%>
                 <main class="content">
                     <%-- MÓDULO 4: Catálogo de Películas con Stock --%>
                     <div class="card section">
@@ -114,14 +115,13 @@
                                     <th>Formato</th>
                                     <th>Duración</th>
                                     <th>Costo/Día</th>
-                                    <th>Stock</th> <%-- Nueva Columna --%>
+                                    <th>Stock</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% for (Producto p : catalogo) {
                                         if (p instanceof Pelicula) {
-                                            String fAlqId = "fAlq" + p.getId();
                                             boolean disponible = p.getStock() > 0;
                                 %>
                                 <tr>
@@ -135,17 +135,17 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <form id="<%= fAlqId%>" action="AlquilerServlet" method="POST" style="display:none;">
+                                        <%-- FORMULARIO ENCAPSULADO: Garantiza el envío del dato --%>
+                                        <form action="AlquilerServlet" method="POST" style="margin: 0;">
                                             <input type="hidden" name="idProd" value="<%= p.getId()%>">
+                                            <button type="submit" class="btn-rent" <%= !disponible ? "disabled style='background-color: #9CA3AF; cursor: not-allowed;'" : ""%>>
+                                                <%= disponible ? "Alquilar" : "Agotado"%>
+                                            </button>
                                         </form>
-                                        <button type="submit" form="<%= fAlqId%>" 
-                                                class="btn-rent" <%= !disponible ? "disabled style='background-color: #9CA3AF; cursor: not-allowed;'" : ""%>>
-                                            <%= disponible ? "Alquilar" : "Agotado"%>
-                                        </button>
                                     </td>
                                 </tr>
                                 <% }
-                    } %>
+                                    } %>
                             </tbody>
                         </table>
 
@@ -158,14 +158,13 @@
                                     <th>Plataforma</th>
                                     <th>Formato</th>
                                     <th>Costo/Día</th>
-                                    <th>Stock</th> <%-- Nueva Columna --%>
+                                    <th>Stock</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% for (Producto p : catalogo) {
                                         if (p instanceof Videojuego) {
-                                            String fAlqId = "fAlq" + p.getId();
                                             boolean disponible = p.getStock() > 0;
                                 %>
                                 <tr>
@@ -179,21 +178,21 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <form id="<%= fAlqId%>" action="AlquilerServlet" method="POST" style="display:none;">
+                                        <form action="AlquilerServlet" method="POST" style="margin: 0;">
                                             <input type="hidden" name="idProd" value="<%= p.getId()%>">
+                                            <button type="submit" class="btn-rent" <%= !disponible ? "disabled style='background-color: #9CA3AF; cursor: not-allowed;'" : ""%>>
+                                                <%= disponible ? "Alquilar" : "Agotado"%>
+                                            </button>
                                         </form>
-                                        <button type="submit" form="<%= fAlqId%>" 
-                                                class="btn-rent" <%= !disponible ? "disabled style='background-color: #9CA3AF; cursor: not-allowed;'" : ""%>>
-                                            <%= disponible ? "Alquilar" : "Agotado"%>
-                                        </button>
                                     </td>
                                 </tr>
                                 <% }
-                    }%>
+                                    }%>
                             </tbody>
                         </table>
                     </div>
                 </main>
+
             </div>
         </div>
     </body>

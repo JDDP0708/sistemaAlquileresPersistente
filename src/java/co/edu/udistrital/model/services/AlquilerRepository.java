@@ -21,17 +21,16 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
 
     @Override
     public boolean add(Alquiler entity) {
-        String sql = "INSERT INTO alquileres (id_cliente, id_producto, fecha_inicio, fecha_devolucion, costo, estado) VALUES (?, ?, ?, ?, ?, ?)";
+        // SQL ajustado a las 5 columnas de la BD
+        String sql = "INSERT INTO alquileres (id_cliente, id_producto, fecha_alquiler, estado) VALUES (?, ?, ?, ?)";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            // El mapeo de IDs de usuario a int se maneja internamente en la lógica o mediante el username
             ps.setString(1, entity.getIdCliente());
-            ps.setString(2, entity.getIdProducto());
+            ps.setInt(2, entity.getIdProducto());
             ps.setDate(3, Date.valueOf(entity.getFechaAlquiler()));
-            ps.setDate(4, Date.valueOf(entity.getFechaPactada()));
-            ps.setDouble(5, entity.getCostoTotal());
-            ps.setString(6, entity.getEstado());
+            ps.setString(4, entity.getEstado());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            System.err.println("Error BD Add Alquiler: " + e.getMessage());
             return false;
         }
     }
@@ -49,9 +48,13 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    lista.add(new Alquiler(rs.getInt("id"), rs.getString("id_cliente"), rs.getString("id_producto"),
-                            rs.getDate("fecha_inicio").toLocalDate(), rs.getDate("fecha_devolucion").toLocalDate(),
-                            rs.getDouble("costo"), rs.getString("estado")));
+                    lista.add(new Alquiler(
+                            rs.getInt("id"),
+                            rs.getString("id_cliente"),
+                            rs.getInt("id_producto"),
+                            rs.getDate("fecha_alquiler").toLocalDate(),
+                            rs.getString("estado")
+                    ));
                 }
             }
         } catch (SQLException e) {
@@ -66,9 +69,13 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
         String sql = "SELECT * FROM alquileres";
         try (Connection con = getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                lista.add(new Alquiler(rs.getInt("id"), rs.getString("id_cliente"), rs.getString("id_producto"),
-                        rs.getDate("fecha_inicio").toLocalDate(), rs.getDate("fecha_devolucion").toLocalDate(),
-                        rs.getDouble("costo"), rs.getString("estado")));
+                lista.add(new Alquiler(
+                        rs.getInt("id"),
+                        rs.getString("id_cliente"),
+                        rs.getInt("id_producto"),
+                        rs.getDate("fecha_alquiler").toLocalDate(),
+                        rs.getString("estado")
+                ));
             }
         } catch (SQLException e) {
             System.err.println("Error en AlquilerRepository.getAll: " + e.getMessage());
@@ -77,13 +84,20 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
     }
 
     @Override
-    public Alquiler getById(String id) {
-        return null;
+    public boolean update(Alquiler entity) {
+        String sql = "UPDATE alquileres SET estado = ? WHERE id = ?";
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, entity.getEstado());
+            ps.setInt(2, entity.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override
-    public boolean update(Alquiler entity) {
-        return false;
+    public Alquiler getById(String id) {
+        return null;
     }
 
     @Override
