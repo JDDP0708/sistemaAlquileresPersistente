@@ -1,5 +1,5 @@
 /*
- * @(#)MembresiaRepository.java 1.0 21/04/2026
+ * @(#)MembresiaRepository.java 1.0 23/04/2026
  *
  * Copyright(C) Juan David Díaz Pérez
  *
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Repositorio encargado de gestionar los beneficios y tipos de membresía.
+ * Repositorio encargado de la persistencia de los tipos de membresía.
  *
  * @author Juan David Díaz Pérez
  * @version 1.0
@@ -34,19 +34,16 @@ public class MembresiaRepository extends BareRepository<Membresia> {
     }
 
     @Override
-    public Membresia getById(String id) {
-        String sql = "SELECT * FROM membresias WHERE id = ?";
+    public boolean update(Membresia entity) {
+        String sql = "UPDATE membresias SET porcentaje_descuento = ?, costo_cambio = ? WHERE id = ?";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, Integer.parseInt(id));
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new Membresia(rs.getInt("id"), rs.getString("nombre"), rs.getDouble("porcentaje_descuento"), rs.getDouble("costo_cambio"));
-                }
-            }
+            ps.setDouble(1, entity.getPorcentajeDescuento());
+            ps.setDouble(2, entity.getCostoCambio());
+            ps.setInt(3, entity.getId());
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error en Membresia.getById: " + e.getMessage());
+            return false;
         }
-        return null;
     }
 
     @Override
@@ -58,7 +55,7 @@ public class MembresiaRepository extends BareRepository<Membresia> {
                 lista.add(new Membresia(rs.getInt("id"), rs.getString("nombre"), rs.getDouble("porcentaje_descuento"), rs.getDouble("costo_cambio")));
             }
         } catch (SQLException e) {
-            System.err.println("Error en Membresia.getAll: " + e.getMessage());
+            System.err.println("Error en MembresiaRepository.getAll: " + e.getMessage());
         }
         return lista;
     }
@@ -72,22 +69,24 @@ public class MembresiaRepository extends BareRepository<Membresia> {
      * @return Verdadero si la actualización fue exitosa.
      */
     @Override
-    public boolean update(Membresia entity) {
-        String sql = "UPDATE membresias SET porcentaje_descuento = ?, costo_cambio = ? WHERE id = ?";
+    public Membresia getById(String id) {
+        String sql = "SELECT * FROM membresias WHERE id = ?";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setDouble(1, entity.getPorcentajeDescuento());
-            ps.setDouble(2, entity.getCostoCambio());
-            ps.setInt(3, entity.getId());
-            return ps.executeUpdate() > 0;
+            ps.setInt(1, Integer.parseInt(id));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Membresia(rs.getInt("id"), rs.getString("nombre"), rs.getDouble("porcentaje_descuento"), rs.getDouble("costo_cambio"));
+                }
+            }
         } catch (SQLException e) {
-            System.err.println("Error en Membresia.update: " + e.getMessage());
-            return false;
+            System.err.println("Error en MembresiaRepository.getById: " + e.getMessage());
         }
+        return null;
     }
 
     @Override
     public boolean delete(String id) {
-        String sql = "DELETE FROM membresias WHERE id = ?";
+        String sql = "DELETE FROM membresias WHERE id = ? AND id != 1";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, Integer.parseInt(id));
             return ps.executeUpdate() > 0;

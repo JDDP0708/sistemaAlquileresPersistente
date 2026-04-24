@@ -1,5 +1,5 @@
 /*
- * @(#)UsuarioRepository.java 1.0 21/04/2026
+ * @(#)UsuarioRepository.java 1.0 23/04/2026
  *
  * Copyright(C) Juan David Díaz Pérez
  *
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Repositorio polimórfico para gestionar Clientes y Administradores.
+ * Repositorio para la gestión de identidades y roles en el sistema.
  *
  * @author Juan David Díaz Pérez
  * @version 1.0
@@ -25,7 +25,6 @@ public class UsuarioRepository extends BareRepository<Perfil> {
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, entity.getUsuario());
             ps.setString(2, entity.getContrasena());
-
             if (entity instanceof Administrador) {
                 ps.setString(3, "ADMIN");
                 ps.setNull(4, Types.DECIMAL);
@@ -33,14 +32,63 @@ public class UsuarioRepository extends BareRepository<Perfil> {
             } else {
                 ps.setString(3, "CLIENTE");
                 ps.setDouble(4, ((Cliente) entity).getSaldo());
-                // Por defecto, se le asigna la membresía básica (id 1)
-                ps.setInt(5, 1);
+                ps.setInt(5, 1); // ID por defecto: Membresía Normal
             }
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error en Usuario.add: " + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Recupera todos los perfiles con rol administrativo.
+     *
+     * @return Lista de administradores.
+     */
+    public List<Perfil> getAllAdmins() {
+        List<Perfil> admins = new ArrayList<>();
+        String sql = "SELECT * FROM usuarios WHERE tipo_perfil = 'ADMIN'";
+        try (Connection con = getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                admins.add(new Administrador(rs.getString("username"), rs.getString("password")));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en UsuarioRepository.getAllAdmins: " + e.getMessage());
+        }
+        return admins;
+    }
+
+    @Override
+    public boolean update(Perfil entity) {
+        if (entity instanceof Cliente) {
+            String sql = "UPDATE usuarios SET saldo = ?, id_membresia = ? WHERE username = ?";
+            try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setDouble(1, ((Cliente) entity).getSaldo());
+                ps.setInt(2, ((Cliente) entity).getMembresia().getId());
+                ps.setString(3, entity.getUsuario());
+                return ps.executeUpdate() > 0;
+            } catch (SQLException e) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(String username) {
+        String sql = "DELETE FROM usuarios WHERE username = ? AND username != 'admin'";
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, username);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en Usuario.delete: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public List<Perfil> getAll() {
+        return null;
     }
 
     @Override
@@ -54,7 +102,8 @@ public class UsuarioRepository extends BareRepository<Perfil> {
                     if ("ADMIN".equals(rs.getString("tipo_perfil"))) {
                         return new Administrador(rs.getString("username"), rs.getString("password"));
                     } else {
-                        Membresia mem = new Membresia(rs.getInt("id_membresia"), rs.getString("nom_mem"), rs.getDouble("porcentaje_descuento"), rs.getDouble("costo_cambio"));
+                        Membresia mem = new Membresia(rs.getInt("id_membresia"), rs.getString("nom_mem"),
+                                rs.getDouble("porcentaje_descuento"), rs.getDouble("costo_cambio"));
                         Cliente c = new Cliente(rs.getString("username"), rs.getString("password"));
                         c.setSaldo(rs.getDouble("saldo"));
                         c.setMembresia(mem);
@@ -63,63 +112,8 @@ public class UsuarioRepository extends BareRepository<Perfil> {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error en Usuario.getById: " + e.getMessage());
+            System.err.println("Error en UsuarioRepository.getById: " + e.getMessage());
         }
         return null;
-    }
-
-    /**
-     * Método exclusivo para obtener solo la lista de administradores en la
-     * vista del SuperAdmin.
-     *
-     * @return Lista de Perfiles de tipo Administrador.
-     */
-    public List<Perfil> getAllAdmins() {
-        List<Perfil> admins = new ArrayList<>();
-        String sql = "SELECT * FROM usuarios WHERE tipo_perfil = 'ADMIN'";
-        try (Connection con = getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                admins.add(new Administrador(rs.getString("username"), rs.getString("password")));
-            }
-        } catch (SQLException e) {
-            System.err.println("Error en Usuario.getAllAdmins: " + e.getMessage());
-        }
-        return admins;
-    }
-
-    /**
-     * @return Lista vacía por defecto.
-     */
-    @Override
-    public List<Perfil> getAll() {
-        return null;
-        /* Implementar si se requiere listar a todos los usuarios */ }
-
-    @Override
-    public boolean update(Perfil entity) {
-        if (entity instanceof Cliente cliente) {
-            String sql = "UPDATE usuarios SET saldo = ?, id_membresia = ? WHERE username = ?";
-            try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-                ps.setDouble(1, cliente.getSaldo());
-                ps.setInt(2, cliente.getMembresia().getId());
-                ps.setString(3, entity.getUsuario());
-                return ps.executeUpdate() > 0;
-            } catch (SQLException e) {
-                System.err.println("Error en Usuario.update: " + e.getMessage());
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean delete(String username) {
-        String sql = "DELETE FROM usuarios WHERE username = ?";
-        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, username);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Error en Usuario.delete: " + e.getMessage());
-            return false;
-        }
     }
 }
