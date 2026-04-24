@@ -63,10 +63,26 @@ public class MembresiaRepository extends BareRepository<Membresia> {
         return lista;
     }
 
+    /**
+     * Actualiza el porcentaje de descuento y el costo de una membresía. El
+     * nombre no se actualiza para preservar la integridad referencial
+     * histórica.
+     *
+     * @param entity Objeto Membresia con los nuevos datos.
+     * @return Verdadero si la actualización fue exitosa.
+     */
     @Override
     public boolean update(Membresia entity) {
-        // Implementación requerida solo si se van a editar membresías existentes
-        return false;
+        String sql = "UPDATE membresias SET porcentaje_descuento = ?, costo_cambio = ? WHERE id = ?";
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDouble(1, entity.getPorcentajeDescuento());
+            ps.setDouble(2, entity.getCostoCambio());
+            ps.setInt(3, entity.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error en Membresia.update: " + e.getMessage());
+            return false;
+        }
     }
 
     @Override

@@ -132,7 +132,7 @@
                             <% for (Producto p : inventario) {
                                     if (p instanceof Pelicula) {
                                         String fId = "fPeli" + p.getId(); // ID único para el formulario de la fila
-%>
+                            %>
                             <tr>
                                 <td><%= p.getNombre()%></td>
                                 <td><%= p.getFormato()%></td>
@@ -155,7 +155,7 @@
                                 </td>
                             </tr>
                             <% }
-                    } %>
+                                } %>
                         </tbody>
                     </table>
 
@@ -196,58 +196,164 @@
                                 </td>
                             </tr>
                             <% }
-                    } %>
+                                } %>
                         </tbody>
                     </table>
                 </div>
-     
-            <%-- Registro con JS corregido --%>
-            <div class="card registro">
-                <h3>Añadir Producto</h3>
-                <form action="RegistrarProductoServlet" method="POST">
-                    <label>Tipo</label>
-                    <select id="tipo" name="tipo" onchange="cambiarCampos()" required>
-                        <option value="PELICULA">Pelicula</option>
-                        <option value="JUEGO">Videojuego</option>
-                    </select>
 
-                    <input type="text" name="nombre" placeholder="Nombre" required>
-                    <input type="number" step="0.01" name="costoDia" placeholder="Costo por dia" required>
-                    <input type="number" name="stock" placeholder="Stock Inicial" required>
+                <%-- Registro con JS corregido --%>
+                <div class="card registro">
+                    <h3>Añadir Producto</h3>
+                    <form action="RegistrarProductoServlet" method="POST">
+                        <label>Tipo</label>
+                        <select id="tipo" name="tipo" onchange="cambiarCampos()" required>
+                            <option value="PELICULA">Pelicula</option>
+                            <option value="JUEGO">Videojuego</option>
+                        </select>
 
-                    <%-- Campos DinÃ¡micos --%>
-                    <div id="contenedorDinamico">
-                        <label id="label1">Formato</label>
-                        <input type="text" id="extra1" name="formato" placeholder="DVD/BluRay" required>
-                        <label id="label2">Duracion</label>
-                        <input type="text" id="extra2" name="duracion" placeholder="120 min" required>
+                        <input type="text" name="nombre" placeholder="Nombre" required>
+                        <input type="number" step="0.01" name="costoDia" placeholder="Costo por dia" required>
+                        <input type="number" name="stock" placeholder="Stock Inicial" required>
+
+                        <%-- Campos DinÃ¡micos --%>
+                        <div id="contenedorDinamico">
+                            <label id="label1">Formato</label>
+                            <input type="text" id="extra1" name="formato" placeholder="DVD/BluRay" required>
+                            <label id="label2">Duracion</label>
+                            <input type="text" id="extra2" name="duracion" placeholder="120 min" required>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Guardar Producto</button>
+                    </form>
+                </div>
+            </div>
+
+            <%-- 
+                Módulo Centralizado de Gestión de Membresías
+            --%>
+            <section class="card section" id="modulo-membresias" style="margin-top: 40px;">
+                <header class="section-header">
+                    <h3>Módulo de Gestión de Membresías</h3>
+                    <p>Administre los niveles de beneficios, descuentos y costos de afiliación para sus clientes.</p>
+                </header>
+
+                <div class="admin-management-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-top: 20px;">
+
+                    <%-- Formulario de Registro de Nueva Membresía --%>
+                    <div class="management-form" style="padding-right: 20px; border-right: 1px solid #D1D5DB;">
+                        <h4>Añadir Nueva Membresía</h4>
+                        <form action="GestionMembresiaServlet" method="POST">
+                            <input type="hidden" name="accion" value="crear">
+
+                            <div class="form-group">
+                                <label for="mem_nombre">Nombre del Nivel</label>
+                                <input type="text" id="mem_nombre" name="nombre" 
+                                       placeholder="Ej: Diamante" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mem_desc">Descuento (Decimal)</label>
+                                <input type="number" step="0.01" min="0" max="1" id="mem_desc" name="descuento" 
+                                       placeholder="Ej: 0.25 para 25%" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mem_costo">Costo de Cambio ($)</label>
+                                <input type="number" step="0.01" min="0" id="mem_costo" name="costo" 
+                                       placeholder="Ej: 50000" required>
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="margin-top: 15px;">
+                                Guardar Membresía
+                            </button>
+                        </form>
                     </div>
 
-                    <button type="submit" class="btn-primary">Guardar Producto</button>
-                </form>
-            </div>
-        </div>
+                    <%-- Tabla de Gestión (Edición y Eliminación) --%>
+                    <div class="management-list">
+                        <h4>Membresías Activas</h4>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Nivel</th>
+                                    <th>Descuento</th>
+                                    <th>Costo de Cambio</th>
+                                    <th colspan="2">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    List<Membresia> listaMembresias = memRepo.getAll();
+                                    for (Membresia m : listaMembresias) {
+                                        String fMemId = "fMem" + m.getId();
+                                %>
+                                <tr>
+                                    <td><strong><%= m.getNombre()%></strong></td>
 
-        <%-- Historial de Alquileres --%>
-        <section class="card section" style="margin-top: 40px;">
-            <h3>Historial General de Alquileres</h3>
-            <table class="styled-table">
-                <thead>
-                    <tr><th>Cliente</th><th>Producto</th><th>Fecha Inicio</th><th>Costo</th><th>Estado</th></tr>
-                </thead>
-                <tbody>
-                    <% for (Alquiler a : alqRepo.getAll()) {%>
-                    <tr>
-                        <td><%= a.getIdCliente()%></td>
-                        <td><%= a.getIdProducto()%></td>
-                        <td><%= a.getFechaAlquiler()%></td>
-                        <td>$<%= a.getCostoTotal()%></td>
-                        <td class="status-<%= a.getEstado().toLowerCase()%>"><%= a.getEstado()%></td>
-                    </tr>
-                    <% }%>
-                </tbody>
-            </table>
-        </section>
-    </div>
-</body>
+                                    <%-- Regla de Negocio: La membresía 'Normal' es intocable --%>
+                                    <% if (m.getNombre().equalsIgnoreCase("Normal") || m.getId() == 1) {%>
+                                    <td><%= m.getPorcentajeDescuento() * 100%>%</td>
+                                    <td>$<%= m.getCostoCambio()%></td>
+                                    <td colspan="2"><em style="color: #6B7280; font-size: 0.85em;">Por Defecto (Protegida)</em></td>
+                                    <% } else {%>
+                                    <td>
+                                        <input type="number" step="0.01" min="0" max="1" name="descuento" form="<%= fMemId%>"
+                                               value="<%= m.getPorcentajeDescuento()%>" class="input-table-edit" required>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" min="0" name="costo" form="<%= fMemId%>"
+                                               value="<%= m.getCostoCambio()%>" class="input-table-edit" required>
+                                    </td>
+
+                                    <%-- Acción 1: Actualizar --%>
+                                    <td style="padding: 5px;">
+                                        <form id="<%= fMemId%>" action="GestionMembresiaServlet" method="POST" style="display:none;">
+                                            <input type="hidden" name="accion" value="actualizar">
+                                            <input type="hidden" name="id" value="<%= m.getId()%>">
+                                        </form>
+                                        <button type="submit" form="<%= fMemId%>" class="btn-table-save">Actualizar</button>
+                                    </td>
+
+                                    <%-- Acción 2: Eliminar --%>
+                                    <td style="padding: 5px;">
+                                        <form action="GestionMembresiaServlet" method="POST" style="margin: 0;">
+                                            <input type="hidden" name="accion" value="eliminar">
+                                            <input type="hidden" name="id" value="<%= m.getId()%>">
+                                            <button type="submit" class="btn-delete" style="padding: 4px 8px; font-size: 11px;"
+                                                    onclick="return confirm('¿Eliminar membresía <%= m.getNombre()%>?')">
+                                                X
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <% } %>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <%-- Historial de Alquileres --%>
+            <section class="card section" style="margin-top: 40px;">
+                <h3>Historial General de Alquileres</h3>
+                <table class="styled-table">
+                    <thead>
+                        <tr><th>Cliente</th><th>Producto</th><th>Fecha Inicio</th><th>Costo</th><th>Estado</th></tr>
+                    </thead>
+                    <tbody>
+                        <% for (Alquiler a : alqRepo.getAll()) {%>
+                        <tr>
+                            <td><%= a.getIdCliente()%></td>
+                            <td><%= a.getIdProducto()%></td>
+                            <td><%= a.getFechaAlquiler()%></td>
+                            <td>$<%= a.getCostoTotal()%></td>
+                            <td class="status-<%= a.getEstado().toLowerCase()%>"><%= a.getEstado()%></td>
+                        </tr>
+                        <% }%>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </body>
 </html>
