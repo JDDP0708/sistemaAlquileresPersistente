@@ -119,91 +119,135 @@
                     <h3>Peliculas en Inventario</h3>
                     <table class="styled-table">
                         <thead>
-                            <tr><th>Nombre</th><th>Formato</th><th>Duracion</th><th>Costo/Dia</th><th>Stock</th></tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Formato</th>
+                                <th>Duracion</th>
+                                <th>Costo/Dia</th>
+                                <th>Stock</th>
+                                <th>Acción</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <% for (Producto p : inventario) {
-                                    if (p instanceof Pelicula) {%>
+                                    if (p instanceof Pelicula) {
+                                        String fId = "fPeli" + p.getId(); // ID único para el formulario de la fila
+%>
                             <tr>
                                 <td><%= p.getNombre()%></td>
                                 <td><%= p.getFormato()%></td>
                                 <td><%= ((Pelicula) p).getDuracion()%></td>
-                                <td>$<%= p.getCostoDia()%></td>
-                                <td><%= p.getStock()%></td>
+                                <td>
+                                    <%-- Vinculamos el input al formulario mediante el ID 'fId' --%>
+                                    <input type="number" step="0.01" name="costoDia" form="<%= fId%>"
+                                           value="<%= p.getCostoDia()%>" class="input-table-edit" required>
+                                </td>
+                                <td>
+                                    <input type="number" name="stock" form="<%= fId%>"
+                                           value="<%= p.getStock()%>" class="input-table-edit" required>
+                                </td>
+                                <td>
+                                    <%-- El formulario se define oculto, no estorba el diseño de la tabla --%>
+                                    <form id="<%= fId%>" action="ActualizarProductoServlet" method="POST" style="display:none;">
+                                        <input type="hidden" name="id" value="<%= p.getId()%>">
+                                    </form>
+                                    <button type="submit" form="<%= fId%>" class="btn-table-save">Guardar</button>
+                                </td>
                             </tr>
                             <% }
-                                } %>
+                    } %>
                         </tbody>
                     </table>
 
                     <h3 style="margin-top: 30px;">Videojuegos en Inventario</h3>
                     <table class="styled-table">
                         <thead>
-                            <tr><th>Nombre</th><th>Plataforma</th><th>Formato</th><th>Costo/Dia</th><th>Stock</th></tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Plataforma</th>
+                                <th>Formato</th>
+                                <th>Costo/Dia</th>
+                                <th>Stock</th>
+                                <th>Acción</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <% for (Producto p : inventario) {
-                                    if (p instanceof Videojuego) {%>
+                                    if (p instanceof Videojuego) {
+                                        String fId = "fJuego" + p.getId();
+                            %>
                             <tr>
                                 <td><%= p.getNombre()%></td>
                                 <td><%= ((Videojuego) p).getPlataforma()%></td>
                                 <td><%= p.getFormato()%></td>
-                                <td>$<%= p.getCostoDia()%></td>
-                                <td><%= p.getStock()%></td>
+                                <td>
+                                    <input type="number" step="0.01" name="costoDia" form="<%= fId%>"
+                                           value="<%= p.getCostoDia()%>" class="input-table-edit" required>
+                                </td>
+                                <td>
+                                    <input type="number" name="stock" form="<%= fId%>"
+                                           value="<%= p.getStock()%>" class="input-table-edit" required>
+                                </td>
+                                <td>
+                                    <form id="<%= fId%>" action="ActualizarProductoServlet" method="POST" style="display:none;">
+                                        <input type="hidden" name="id" value="<%= p.getId()%>">
+                                    </form>
+                                    <button type="submit" form="<%= fId%>" class="btn-table-save">Guardar</button>
+                                </td>
                             </tr>
                             <% }
-                                } %>
+                    } %>
                         </tbody>
                     </table>
                 </div>
+     
+            <%-- Registro con JS corregido --%>
+            <div class="card registro">
+                <h3>Añadir Producto</h3>
+                <form action="RegistrarProductoServlet" method="POST">
+                    <label>Tipo</label>
+                    <select id="tipo" name="tipo" onchange="cambiarCampos()" required>
+                        <option value="PELICULA">Pelicula</option>
+                        <option value="JUEGO">Videojuego</option>
+                    </select>
 
-                <%-- Registro con JS corregido --%>
-                <div class="card registro">
-                    <h3>Añadir Producto</h3>
-                    <form action="RegistrarProductoServlet" method="POST">
-                        <label>Tipo</label>
-                        <select id="tipo" name="tipo" onchange="cambiarCampos()" required>
-                            <option value="PELICULA">Pelicula</option>
-                            <option value="JUEGO">Videojuego</option>
-                        </select>
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                    <input type="number" step="0.01" name="costoDia" placeholder="Costo por dia" required>
+                    <input type="number" name="stock" placeholder="Stock Inicial" required>
 
-                        <input type="text" name="nombre" placeholder="Nombre" required>
-                        <input type="number" step="0.01" name="costoDia" placeholder="Costo por dia" required>
-                        <input type="number" name="stock" placeholder="Stock Inicial" required>
+                    <%-- Campos DinÃ¡micos --%>
+                    <div id="contenedorDinamico">
+                        <label id="label1">Formato</label>
+                        <input type="text" id="extra1" name="formato" placeholder="DVD/BluRay" required>
+                        <label id="label2">Duracion</label>
+                        <input type="text" id="extra2" name="duracion" placeholder="120 min" required>
+                    </div>
 
-                        <%-- Campos DinÃ¡micos --%>
-                        <div id="contenedorDinamico">
-                            <label id="label1">Formato</label>
-                            <input type="text" id="extra1" name="formato" placeholder="DVD/BluRay" required>
-                            <label id="label2">Duracion</label>
-                            <input type="text" id="extra2" name="duracion" placeholder="120 min" required>
-                        </div>
-
-                        <button type="submit" class="btn-primary">Guardar Producto</button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn-primary">Guardar Producto</button>
+                </form>
             </div>
-
-            <%-- Historial de Alquileres --%>
-            <section class="card section" style="margin-top: 40px;">
-                <h3>Historial General de Alquileres</h3>
-                <table class="styled-table">
-                    <thead>
-                        <tr><th>Cliente</th><th>Producto</th><th>Fecha Inicio</th><th>Costo</th><th>Estado</th></tr>
-                    </thead>
-                    <tbody>
-                        <% for (Alquiler a : alqRepo.getAll()) {%>
-                        <tr>
-                            <td><%= a.getIdCliente()%></td>
-                            <td><%= a.getIdProducto()%></td>
-                            <td><%= a.getFechaAlquiler()%></td>
-                            <td>$<%= a.getCostoTotal()%></td>
-                            <td class="status-<%= a.getEstado().toLowerCase()%>"><%= a.getEstado()%></td>
-                        </tr>
-                        <% }%>
-                    </tbody>
-                </table>
-            </section>
         </div>
-    </body>
+
+        <%-- Historial de Alquileres --%>
+        <section class="card section" style="margin-top: 40px;">
+            <h3>Historial General de Alquileres</h3>
+            <table class="styled-table">
+                <thead>
+                    <tr><th>Cliente</th><th>Producto</th><th>Fecha Inicio</th><th>Costo</th><th>Estado</th></tr>
+                </thead>
+                <tbody>
+                    <% for (Alquiler a : alqRepo.getAll()) {%>
+                    <tr>
+                        <td><%= a.getIdCliente()%></td>
+                        <td><%= a.getIdProducto()%></td>
+                        <td><%= a.getFechaAlquiler()%></td>
+                        <td>$<%= a.getCostoTotal()%></td>
+                        <td class="status-<%= a.getEstado().toLowerCase()%>"><%= a.getEstado()%></td>
+                    </tr>
+                    <% }%>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
 </html>

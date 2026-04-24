@@ -178,3 +178,37 @@ button:hover {
 .btn-secondary:hover {
     background-color: #3B82F6;
 }
+
+.input-table-edit {
+    width: 100%;
+    max-width: 80px; /* Tamaño similar al texto original */
+    padding: 3px;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+    text-align: center;
+    background-color: transparent; /* Se ve como texto simple hasta que haces clic */
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.input-table-edit:focus {
+    background-color: #FFFFFF;
+    border-color: #1E3A8A;
+    outline: none;
+}
+
+.btn-table-save {
+    background-color: #10B981;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.btn-table-save:hover {
+    background-color: #059669;
+}
