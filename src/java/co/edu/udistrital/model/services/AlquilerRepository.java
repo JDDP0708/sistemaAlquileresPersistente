@@ -19,6 +19,13 @@ import java.util.List;
  */
 public class AlquilerRepository extends BareRepository<Alquiler> {
 
+    /**
+     * Agrega un nuevo registro de alquiler a la base de datos.
+     *
+     * @param entity Objeto Alquiler a insertar con información de la transacción.
+     * @return Verdadero si la inserción fue exitosa.
+     * @throws SQLException Si hay error en la operación de base de datos.
+     */
     @Override
     public boolean add(Alquiler entity) {
 
@@ -65,6 +72,12 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
         return lista;
     }
 
+    /**
+     * Obtiene todos los registros de alquileres en la base de datos.
+     *
+     * @return Lista completa de alquileres históricos.
+     * @throws SQLException Si hay error en la operación de base de datos.
+     */
     @Override
     public List<Alquiler> getAll() {
         List<Alquiler> lista = new ArrayList<>();
@@ -86,6 +99,13 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
         return lista;
     }
 
+    /**
+     * Actualiza el estado de un alquiler existente.
+     *
+     * @param entity Objeto Alquiler con el nuevo estado.
+     * @return Verdadero si la actualización fue exitosa.
+     * @throws SQLException Si hay error en la operación de base de datos.
+     */
     @Override
     public boolean update(Alquiler entity) {
         String sql = "UPDATE alquileres SET estado = ? WHERE id = ?";
@@ -98,11 +118,25 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
         }
     }
 
+    /**
+     * Obtiene un alquiler específico por su identificador.
+     * Nota: Esta operación no está implementada en la lógica actual.
+     *
+     * @param id Identificador del alquiler a buscar.
+     * @return Null - operación no implementada.
+     */
     @Override
     public Alquiler getById(String id) {
         return null;
     }
 
+    /**
+     * Elimina un alquiler de la base de datos.
+     * Nota: Esta operación no está implementada en la lógica actual.
+     *
+     * @param id Identificador del alquiler a eliminar.
+     * @return Falso - operación no implementada.
+     */
     @Override
     public boolean delete(String id) {
         return false;

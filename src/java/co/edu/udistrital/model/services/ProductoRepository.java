@@ -21,11 +21,12 @@ import java.util.List;
 public class ProductoRepository extends BareRepository<Producto> {
 
     /**
-     * Registra un nuevo producto discriminando su tipo para las columnas
-     * específicas.
+     * Registra un nuevo producto discriminando su tipo para las columnas específicas.
+     * Implementa Single Table Inheritance (STI) diferenciando entre Película y Videojuego.
      *
      * @param entity Producto a guardar.
-     * @return booleano resultado.
+     * @return Verdadero si la inserción fue exitosa.
+     * @throws SQLException Si hay error en la operación de base de datos.
      */
     @Override
     public boolean add(Producto entity) {
@@ -56,7 +57,8 @@ public class ProductoRepository extends BareRepository<Producto> {
      * Actualiza el stock y el costo por día de un producto existente.
      *
      * @param entity Objeto con los nuevos valores.
-     * @return booleano resultado.
+     * @return Verdadero si la actualización fue exitosa.
+     * @throws SQLException Si hay error en la operación de base de datos.
      */
     @Override
     public boolean update(Producto entity) {
@@ -74,8 +76,10 @@ public class ProductoRepository extends BareRepository<Producto> {
 
     /**
      * Recupera el catálogo completo instanciando la subclase correspondiente.
+     * Implementa Single Table Inheritance diferenciando Películas de Videojuegos.
      *
      * @return Listado de productos.
+     * @throws SQLException Si hay error en la operación de base de datos.
      */
     @Override
     public List<Producto> getAll() {
@@ -98,6 +102,14 @@ public class ProductoRepository extends BareRepository<Producto> {
         return lista;
     }
 
+    /**
+     * Obtiene un producto específico por su identificador.
+     * Instancia la subclase correspondiente (Película o Videojuego) según el tipo.
+     *
+     * @param id Identificador del producto a buscar.
+     * @return Objeto Producto si existe, null en caso contrario.
+     * @throws SQLException Si hay error en la operación de base de datos.
+     */
     @Override
     public Producto getById(String id) {
         String sql = "SELECT * FROM productos WHERE id = ?";
@@ -121,6 +133,13 @@ public class ProductoRepository extends BareRepository<Producto> {
         return null;
     }
 
+    /**
+     * Elimina un producto de la base de datos.
+     * Nota: Esta operación no está implementada en la lógica actual.
+     *
+     * @param id Identificador del producto a eliminar.
+     * @return Falso - operación no implementada.
+     */
     @Override
     public boolean delete(String id) {
         return false;

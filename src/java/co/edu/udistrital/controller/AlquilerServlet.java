@@ -16,10 +16,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 /**
- * Sevlet encargado de la gestion del alquiler de los productos
+ * Servlet encargado de la gestión del alquiler de productos.
+ * Valida disponibilidad de stock, saldo del cliente, calcula costo total
+ * considerando membresías y actualiza inventario tras confirmar alquiler.
  *
  * @author Juan David Díaz Pérez
- * @version 1.0
+ * @version 1.1
  */
 @WebServlet(name = "AlquilerServlet", urlPatterns = {"/AlquilerServlet"})
 public class AlquilerServlet extends HttpServlet {

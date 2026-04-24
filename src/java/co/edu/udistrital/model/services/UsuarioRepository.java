@@ -19,6 +19,13 @@ import java.util.List;
  */
 public class UsuarioRepository extends BareRepository<Perfil> {
 
+    /**
+     * Agrega un nuevo usuario al sistema discriminando su tipo (Administrador o Cliente).
+     *
+     * @param entity Objeto Perfil a registrar (Administrador o Cliente).
+     * @return Verdadero si la inserción fue exitosa.
+     * @throws SQLException Si hay error en la operación de base de datos.
+     */
     @Override
     public boolean add(Perfil entity) {
         String sql = "INSERT INTO usuarios (username, password, tipo_perfil, saldo, id_membresia) VALUES (?, ?, ?, ?, ?)";
@@ -58,6 +65,14 @@ public class UsuarioRepository extends BareRepository<Perfil> {
         return admins;
     }
 
+    /**
+     * Actualiza los datos de un cliente existente.
+     * Solo actualiza clientes, los administradores no se pueden modificar.
+     *
+     * @param entity Objeto Perfil con los nuevos datos (debe ser Cliente).
+     * @return Verdadero si la actualización fue exitosa.
+     * @throws SQLException Si hay error en la operación de base de datos.
+     */
     @Override
     public boolean update(Perfil entity) {
         if (entity instanceof Cliente) {
@@ -74,6 +89,14 @@ public class UsuarioRepository extends BareRepository<Perfil> {
         return false;
     }
 
+    /**
+     * Elimina un usuario del sistema.
+     * Protege la cuenta de administrador raíz (username='admin').
+     *
+     * @param username Nombre de usuario a eliminar.
+     * @return Verdadero si la eliminación fue exitosa.
+     * @throws SQLException Si hay error en la operación de base de datos.
+     */
     @Override
     public boolean delete(String username) {
         String sql = "DELETE FROM usuarios WHERE username = ? AND username != 'admin'";
@@ -86,11 +109,26 @@ public class UsuarioRepository extends BareRepository<Perfil> {
         }
     }
 
+    /**
+     * Obtiene todos los usuarios del sistema.
+     * Nota: Esta operación no está implementada en la lógica actual.
+     *
+     * @return Null - operación no implementada.
+     */
     @Override
     public List<Perfil> getAll() {
         return null;
     }
 
+    /**
+     * Obtiene un usuario específico por su nombre de usuario.
+     * Instancia la subclase correspondiente (Administrador o Cliente) según el tipo.
+     * Para clientes, carga también la membresía asociada.
+     *
+     * @param username Nombre de usuario a buscar.
+     * @return Objeto Perfil si existe, null en caso contrario.
+     * @throws SQLException Si hay error en la operación de base de datos.
+     */
     @Override
     public Perfil getById(String username) {
         String sql = "SELECT u.*, m.nombre AS nom_mem, m.porcentaje_descuento, m.costo_cambio "
