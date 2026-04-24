@@ -83,15 +83,24 @@ public class ProductoRepository extends BareRepository<Producto> {
         return null;
     }
 
+    /**
+     * Actualiza los valores de stock y precio de un producto existente.
+     *
+     * @param entity Objeto producto con los nuevos valores cargados.
+     * @return verdadero si la fila fue afectada en la base de datos.
+     */
     @Override
     public boolean update(Producto entity) {
-        String sql = "UPDATE productos SET stock = ? WHERE id = ?";
+        String sql = "UPDATE productos SET stock = ?, costo_dia = ? WHERE id = ?";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setInt(1, entity.getStock());
-            ps.setInt(2, entity.getId());
+            ps.setDouble(2, entity.getCostoDia());
+            ps.setInt(3, entity.getId());
+
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error en Producto.update: " + e.getMessage());
+            System.err.println("Error en ProductoRepository.update: " + e.getMessage());
             return false;
         }
     }
@@ -99,5 +108,5 @@ public class ProductoRepository extends BareRepository<Producto> {
     @Override
     public boolean delete(String id) {
         return false;
-        /* No recomendado borrar productos físicos, mejor cambiar stock a 0 */ }
+    }
 }
