@@ -104,59 +104,92 @@
                 </aside>
 
                 <main class="content">
-                    <%-- MÓDULO 4: Tablas de Productos --%>
+                    <%-- MÓDULO 4: Catálogo de Películas con Stock --%>
                     <div class="card section">
                         <h3>Catálogo de Películas</h3>
                         <table class="styled-table">
                             <thead>
-                                <tr><th>Nombre</th><th>Formato</th><th>Duración</th><th>Costo/Día</th><th>Acción</th></tr>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Formato</th>
+                                    <th>Duración</th>
+                                    <th>Costo/Día</th>
+                                    <th>Stock</th> <%-- Nueva Columna --%>
+                                    <th>Acción</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <% for (Producto p : catalogo) {
-                                        if (p instanceof Pelicula && p.getStock() > 0) {
+                                        if (p instanceof Pelicula) {
                                             String fAlqId = "fAlq" + p.getId();
+                                            boolean disponible = p.getStock() > 0;
                                 %>
                                 <tr>
                                     <td><strong><%= p.getNombre()%></strong></td>
                                     <td><%= p.getFormato()%></td>
                                     <td><%= ((Pelicula) p).getDuracion()%></td>
-                                    <td>$<%= p.getCostoDia()%></td>
+                                    <td>$<%= String.format("%.2f", p.getCostoDia())%></td>
+                                    <td>
+                                        <span class="<%= disponible ? "stock-ok" : "stock-none"%>">
+                                            <%= p.getStock()%> uds
+                                        </span>
+                                    </td>
                                     <td>
                                         <form id="<%= fAlqId%>" action="AlquilerServlet" method="POST" style="display:none;">
                                             <input type="hidden" name="idProd" value="<%= p.getId()%>">
                                         </form>
-                                        <button type="submit" form="<%= fAlqId%>" class="btn-rent">Alquilar</button>
+                                        <button type="submit" form="<%= fAlqId%>" 
+                                                class="btn-rent" <%= !disponible ? "disabled style='background-color: #9CA3AF; cursor: not-allowed;'" : ""%>>
+                                            <%= disponible ? "Alquilar" : "Agotado"%>
+                                        </button>
                                     </td>
                                 </tr>
                                 <% }
-                                } %>
+                    } %>
                             </tbody>
                         </table>
 
+                        <%-- Catálogo de Videojuegos con Stock --%>
                         <h3 style="margin-top: 40px;">Catálogo de Videojuegos</h3>
                         <table class="styled-table">
                             <thead>
-                                <tr><th>Nombre</th><th>Plataforma</th><th>Formato</th><th>Costo/Día</th><th>Acción</th></tr>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Plataforma</th>
+                                    <th>Formato</th>
+                                    <th>Costo/Día</th>
+                                    <th>Stock</th> <%-- Nueva Columna --%>
+                                    <th>Acción</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <% for (Producto p : catalogo) {
-                                        if (p instanceof Videojuego && p.getStock() > 0) {
+                                        if (p instanceof Videojuego) {
                                             String fAlqId = "fAlq" + p.getId();
+                                            boolean disponible = p.getStock() > 0;
                                 %>
                                 <tr>
                                     <td><strong><%= p.getNombre()%></strong></td>
                                     <td><%= ((Videojuego) p).getPlataforma()%></td>
                                     <td><%= p.getFormato()%></td>
-                                    <td>$<%= p.getCostoDia()%></td>
+                                    <td>$<%= String.format("%.2f", p.getCostoDia())%></td>
+                                    <td>
+                                        <span class="<%= disponible ? "stock-ok" : "stock-none"%>">
+                                            <%= p.getStock()%> uds
+                                        </span>
+                                    </td>
                                     <td>
                                         <form id="<%= fAlqId%>" action="AlquilerServlet" method="POST" style="display:none;">
                                             <input type="hidden" name="idProd" value="<%= p.getId()%>">
                                         </form>
-                                        <button type="submit" form="<%= fAlqId%>" class="btn-rent">Alquilar</button>
+                                        <button type="submit" form="<%= fAlqId%>" 
+                                                class="btn-rent" <%= !disponible ? "disabled style='background-color: #9CA3AF; cursor: not-allowed;'" : ""%>>
+                                            <%= disponible ? "Alquilar" : "Agotado"%>
+                                        </button>
                                     </td>
                                 </tr>
                                 <% }
-                                }%>
+                    }%>
                             </tbody>
                         </table>
                     </div>
