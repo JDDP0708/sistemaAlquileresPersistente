@@ -1,11 +1,6 @@
-/* * @(#)client.css 1.0 23/04/2026
- * Estilos especializados para la interfaz de usuario final.
- * Autor: Juan David Díaz Pérez
- */
-
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #F3F4F6; /* Gris claro de fondo */
+    background-color: #F3F4F6; 
     margin: 0;
     padding: 0;
     color: #111827;
@@ -17,7 +12,6 @@ body {
     margin: 30px auto;
 }
 
-/* --- Módulo de Cabecera (Info de Usuario) --- */
 .header-client {
     display: flex;
     justify-content: space-between;
@@ -26,7 +20,7 @@ body {
     padding: 20px 30px;
     border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border-left: 8px solid #1E3A8A; /* Azul corporativo */
+    border-left: 8px solid #1E3A8A;
     margin-bottom: 30px;
 }
 
@@ -60,7 +54,6 @@ body {
     font-weight: bold;
 }
 
-/* --- Grid Principal --- */
 .main-grid {
     display: grid;
     grid-template-columns: 350px 1fr;
@@ -82,7 +75,6 @@ h3 {
     font-size: 1.2rem;
 }
 
-/* --- Estilos de Formularios (Recarga y Membresía) --- */
 .form-inline, .form-vertical {
     display: flex;
     gap: 10px;
@@ -110,7 +102,6 @@ input:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
 }
 
-/* --- Tablas de Productos --- */
 .styled-table {
     width: 100%;
     border-collapse: collapse;
@@ -134,7 +125,6 @@ input:focus, select:focus {
     background-color: #F9FAFB;
 }
 
-/* --- Botones de Acción --- */
 .btn-primary {
     background-color: #1E3A8A;
     color: white;
@@ -161,7 +151,7 @@ input:focus, select:focus {
 }
 
 .btn-rent {
-    background-color: #10B981; /* Verde éxito */
+    background-color: #10B981; 
     color: white;
     border: none;
     padding: 8px 16px;
@@ -175,7 +165,7 @@ input:focus, select:focus {
 }
 
 .btn-delete {
-    background-color: #EF4444; /* Rojo devolución */
+    background-color: #EF4444; 
     color: white;
     border: none;
     padding: 6px 12px;
@@ -199,7 +189,6 @@ input:focus, select:focus {
     color: #EF4444;
 }
 
-/* Etiquetas de estado */
 .tag-active {
     background: #FEF3C7;
     color: #92400E;
@@ -214,4 +203,46 @@ input:focus, select:focus {
     color: #9CA3AF;
     padding: 20px;
     font-style: italic;
+}
+
+.alert-container {
+    width: 100%;
+    margin-bottom: 20px;
+    animation: fadein 0.5s, fadeout 0.5s 4.5s forwards; /* Desaparece tras 5 segundos */
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.alert-success {
+    background-color: #D1FAE5;
+    color: #065F46;
+    border-left: 6px solid #10B981;
+}
+
+.alert-danger {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    border-left: 6px solid #EF4444;
+}
+
+.alert-warning {
+    background-color: #FEF3C7;
+    color: #92400E;
+    border-left: 6px solid #F59E0B;
+}
+
+@keyframes fadein {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; display: none; }
 }

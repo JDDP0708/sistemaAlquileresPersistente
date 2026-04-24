@@ -31,6 +31,46 @@
                 <a href="LogoutServlet" class="btn-logout">Cerrar Sesion</a>
             </header>
 
+            <%
+                String errorAdm = request.getParameter("error");
+                String sucProd = request.getParameter("registroProducto");
+                String sucUpd = request.getParameter("update");
+                String sucMem = request.getParameter("memSuccess");
+                String sucAdmC = request.getParameter("successAdmin");
+                String sucAdmD = request.getParameter("delAdmin");
+
+                if (errorAdm != null || sucProd != null || sucUpd != null || sucMem != null || sucAdmC != null || sucAdmD != null) {
+            %>
+            <div class="alert-container">
+                <% if ("db".equals(errorAdm) || "db_del".equals(errorAdm)) { %>
+                <div class="alert alert-danger">Error de Base de Datos. No se pudo completar la transacción.</div>
+                <% } else if ("unauthorized".equals(errorAdm)) { %>
+                <div class="alert alert-danger">Acceso denegado. Se requieren permisos de SuperAdmin.</div>
+                <% } else if ("exists".equals(errorAdm)) { %>
+                <div class="alert alert-warning">El usuario ingresado ya existe en el sistema.</div>
+                <% } else if ("protected".equals(errorAdm)) { %>
+                <div class="alert alert-warning">Operación rechazada. Este registro está protegido por el sistema.</div>
+                <% } else if ("invalid_data".equals(errorAdm) || "invalid_format".equals(errorAdm)) { %>
+                <div class="alert alert-danger">Formato de datos incorrecto. Verifique los campos numéricos.</div>
+
+                <% } else if ("success".equals(sucProd)) { %>
+                <div class="alert alert-success">Nuevo producto registrado exitosamente en el catálogo.</div>
+                <% } else if ("success".equals(sucUpd)) { %>
+                <div class="alert alert-success">Inventario actualizado correctamente.</div>
+                <% } else if ("created".equals(sucMem)) { %>
+                <div class="alert alert-success">Nueva membresía añadida al sistema.</div>
+                <% } else if ("updated".equals(sucMem)) { %>
+                <div class="alert alert-success">Valores de membresía actualizados correctamente.</div>
+                <% } else if ("deleted".equals(sucMem)) { %>
+                <div class="alert alert-success">Nivel de membresía eliminado del sistema.</div>
+                <% } else if ("1".equals(sucAdmC)) { %>
+                <div class="alert alert-success">Nuevo perfil de Administrador creado.</div>
+                <% } else if ("1".equals(sucAdmD)) { %>
+                <div class="alert alert-success">Acceso revocado al administrador seleccionado.</div>
+                <% } %>
+            </div>
+            <% } %>
+
             <% if (usuarioActual.getUsuario().equals("admin")) { %>
             <section class="card section" id="modulo-administradores" style="margin-top: 40px;">
                 <header class="section-header">
@@ -257,7 +297,7 @@
                                 </td>
                             </tr>
                             <% }
-                    } %>
+                                } %>
                         </tbody>
                     </table>
 
@@ -300,7 +340,7 @@
                                 </td>
                             </tr>
                             <% }
-                    } %>
+                                } %>
                         </tbody>
                     </table>
                 </div>

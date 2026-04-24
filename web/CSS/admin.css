@@ -181,12 +181,12 @@ button:hover {
 
 .input-table-edit {
     width: 100%;
-    max-width: 80px; /* Tamaño similar al texto original */
+    max-width: 80px; 
     padding: 3px;
     border: 1px solid #D1D5DB;
     border-radius: 4px;
     text-align: center;
-    background-color: transparent; /* Se ve como texto simple hasta que haces clic */
+    background-color: transparent; 
     font-family: inherit;
     font-size: 14px;
     box-sizing: border-box;
@@ -211,4 +211,46 @@ button:hover {
 
 .btn-table-save:hover {
     background-color: #059669;
+}
+
+.alert-container {
+    width: 100%;
+    margin-bottom: 20px;
+    animation: fadein 0.5s, fadeout 0.5s 4.5s forwards; 
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.alert-success {
+    background-color: #D1FAE5;
+    color: #065F46;
+    border-left: 6px solid #10B981;
+}
+
+.alert-danger {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    border-left: 6px solid #EF4444;
+}
+
+.alert-warning {
+    background-color: #FEF3C7;
+    color: #92400E;
+    border-left: 6px solid #F59E0B;
+}
+
+@keyframes fadein {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; display: none; }
 }

@@ -51,6 +51,38 @@
                 </div>
             </header>
 
+            <%
+                String errorCli = request.getParameter("error");
+                String successAlq = request.getParameter("alquiler");
+                String successDev = request.getParameter("devolucion");
+                String successSal = request.getParameter("saldo");
+                String successMem = request.getParameter("membresia");
+
+                if (errorCli != null || successAlq != null || successDev != null || successSal != null || successMem != null) {
+            %>
+            <div class="alert-container">
+                <% if ("saldo_insuficiente".equals(errorCli)) { %>
+                <div class="alert alert-danger">Saldo insuficiente. Por favor, recargue su cuenta.</div>
+                <% } else if ("agotado".equals(errorCli)) { %>
+                <div class="alert alert-warning">El producto seleccionado ya no tiene stock disponible.</div>
+                <% } else if ("alquiler_no_encontrado".equals(errorCli)) { %>
+                <div class="alert alert-danger">No se encontró el registro del alquiler para devolver.</div>
+                <% } else if ("datos_vacios".equals(errorCli) || "formato_invalido".equals(errorCli)) { %>
+                <div class="alert alert-danger">Error en los datos enviados. Intente de nuevo.</div>
+                <% } else if ("falla_bd".equals(errorCli) || "db_error".equals(errorCli)) { %>
+                <div class="alert alert-danger">Ocurrió un error en el servidor. Contacte al administrador.</div>
+                <% } else if ("success".equals(successAlq)) { %>
+                <div class="alert alert-success">¡Alquiler realizado con éxito! Disfrute su producto.</div>
+                <% } else if ("success".equals(successDev)) { %>
+                <div class="alert alert-success">Devolución procesada. El producto ha regresado al inventario.</div>
+                <% } else if ("success".equals(successSal)) { %>
+                <div class="alert alert-success">Su recarga de saldo se ha procesado correctamente.</div>
+                <% } else if ("success".equals(successMem)) { %>
+                <div class="alert alert-success">¡Felicidades! Su nivel de membresía ha sido actualizado.</div>
+                <% } %>
+            </div>
+            <% } %>
+
             <div class="main-grid">
 
                 <%-- LATERAL: Membresía y Alquileres Activos --%>
@@ -141,7 +173,7 @@
                                     </td>
                                 </tr>
                                 <% }
-                                } %>
+                                    } %>
                             </tbody>
                         </table>
 
@@ -180,7 +212,7 @@
                                     </td>
                                 </tr>
                                 <% }
-                                }%>
+                                    }%>
                             </tbody>
                         </table>
                     </div>
