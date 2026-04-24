@@ -1,0 +1,217 @@
+/* * @(#)client.css 1.0 23/04/2026
+ * Estilos especializados para la interfaz de usuario final.
+ * Autor: Juan David Díaz Pérez
+ */
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #F3F4F6; /* Gris claro de fondo */
+    margin: 0;
+    padding: 0;
+    color: #111827;
+}
+
+.container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 30px auto;
+}
+
+/* --- Módulo de Cabecera (Info de Usuario) --- */
+.header-client {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFFFFF;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-left: 8px solid #1E3A8A; /* Azul corporativo */
+    margin-bottom: 30px;
+}
+
+.user-info h2 {
+    margin: 0;
+    color: #1E3A8A;
+    font-size: 1.5rem;
+}
+
+.badges {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.badge-mem {
+    background: #E0E7FF;
+    color: #1E3A8A;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.badge-saldo {
+    background: #D1FAE5;
+    color: #065F46;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* --- Grid Principal --- */
+.main-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 25px;
+}
+
+.card {
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+h3 {
+    color: #1E3A8A;
+    margin-top: 0;
+    border-bottom: 2px solid #F3F4F6;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+/* --- Estilos de Formularios (Recarga y Membresía) --- */
+.form-inline, .form-vertical {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.form-vertical {
+    flex-direction: column;
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    background-color: #F9FAFB;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #1E3A8A;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+/* --- Tablas de Productos --- */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.styled-table th {
+    background-color: #1E3A8A;
+    color: #FFFFFF;
+    text-align: left;
+    padding: 12px;
+}
+
+.styled-table td {
+    padding: 12px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.styled-table tr:hover {
+    background-color: #F9FAFB;
+}
+
+/* --- Botones de Acción --- */
+.btn-primary {
+    background-color: #1E3A8A;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #1e293b;
+}
+
+.btn-secondary {
+    background-color: #F3F4F6;
+    color: #1E3A8A;
+    border: 1px solid #1E3A8A;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-rent {
+    background-color: #10B981; /* Verde éxito */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-rent:hover {
+    background-color: #059669;
+}
+
+.btn-delete {
+    background-color: #EF4444; /* Rojo devolución */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-delete:hover {
+    background-color: #DC2626;
+}
+
+.btn-logout {
+    color: #6B7280;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btn-logout:hover {
+    color: #EF4444;
+}
+
+/* Etiquetas de estado */
+.tag-active {
+    background: #FEF3C7;
+    color: #92400E;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #9CA3AF;
+    padding: 20px;
+    font-style: italic;
+}
