@@ -160,7 +160,7 @@
                 <%-- Registro con JS corregido --%>
                 <div class="card registro">
                     <h3>Añadir Producto</h3>
-                    <form action="ProductoServlet" method="POST">
+                    <form action="RegistrarProductoServlet" method="POST">
                         <label>Tipo</label>
                         <select id="tipo" name="tipo" onchange="cambiarCampos()" required>
                             <option value="PELICULA">Pelicula</option>
