@@ -21,7 +21,7 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
 
     @Override
     public boolean add(Alquiler entity) {
-        // SQL ajustado a las 5 columnas de la BD
+
         String sql = "INSERT INTO alquileres (id_cliente, id_producto, fecha_alquiler, costo, estado) VALUES (?, ?, ?, ?, ?)";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, entity.getIdCliente());

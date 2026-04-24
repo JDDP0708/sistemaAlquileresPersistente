@@ -46,7 +46,6 @@ public class AlquilerServlet extends HttpServlet {
 
         String idProdStr = request.getParameter("idProd");
 
-        // Validación contra nulls (Evita el NumberFormatException)
         if (idProdStr == null || idProdStr.trim().isEmpty()) {
             response.sendRedirect("cliente.jsp?error=datos_vacios");
             return;
@@ -63,9 +62,8 @@ public class AlquilerServlet extends HttpServlet {
 
             if (producto != null && producto.getStock() > 0) {
 
-                // Lógica de cobro: Se calcula y descuenta, aunque no se guarde en la BD 'alquileres'
                 CalculadoraAlquiler calc = new CalculadoraAlquiler();
-                double totalPagar = calc.calcularTotal(producto, cliente, 3); // 3 Días por defecto
+                double totalPagar = calc.calcularTotal(producto, cliente, 1);
 
                 if (cliente.getSaldo() >= totalPagar) {
 
@@ -75,7 +73,6 @@ public class AlquilerServlet extends HttpServlet {
                     producto.setStock(producto.getStock() - 1);
                     prodRepo.update(producto);
 
-                    // Se envía el Alquiler con las columnas disponibles
                     Alquiler nuevoAlquiler = new Alquiler(cliente.getUsuario(), producto.getId(), totalPagar);
 
                     if (alqRepo.add(nuevoAlquiler)) {

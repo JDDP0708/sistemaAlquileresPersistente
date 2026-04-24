@@ -105,16 +105,16 @@
 
                 <%-- CONTENIDO: Catálogo de Productos --%>
                 <main class="content">
-                    <%-- MÓDULO 4: Catálogo de Películas con Stock --%>
                     <div class="card section">
                         <h3>Catálogo de Películas</h3>
                         <table class="styled-table">
                             <thead>
                                 <tr>
+                                    <th>ID</th> <%-- Nueva Columna --%>
                                     <th>Nombre</th>
                                     <th>Formato</th>
                                     <th>Duración</th>
-                                    <th>Costo/Día</th>
+                                    <th>Costo</th>
                                     <th>Stock</th>
                                     <th>Acción</th>
                                 </tr>
@@ -125,17 +125,13 @@
                                             boolean disponible = p.getStock() > 0;
                                 %>
                                 <tr>
+                                    <td style="color: #6B7280; font-family: monospace;"><strong>#<%= p.getId()%></strong></td>
                                     <td><strong><%= p.getNombre()%></strong></td>
                                     <td><%= p.getFormato()%></td>
                                     <td><%= ((Pelicula) p).getDuracion()%></td>
                                     <td>$<%= String.format("%.2f", p.getCostoDia())%></td>
+                                    <td><span class="<%= disponible ? "stock-ok" : "stock-none"%>"><%= p.getStock()%> uds</span></td>
                                     <td>
-                                        <span class="<%= disponible ? "stock-ok" : "stock-none"%>">
-                                            <%= p.getStock()%> uds
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <%-- FORMULARIO ENCAPSULADO: Garantiza el envío del dato --%>
                                         <form action="AlquilerServlet" method="POST" style="margin: 0;">
                                             <input type="hidden" name="idProd" value="<%= p.getId()%>">
                                             <button type="submit" class="btn-rent" <%= !disponible ? "disabled style='background-color: #9CA3AF; cursor: not-allowed;'" : ""%>>
@@ -145,19 +141,19 @@
                                     </td>
                                 </tr>
                                 <% }
-                                    } %>
+                                } %>
                             </tbody>
                         </table>
 
-                        <%-- Catálogo de Videojuegos con Stock --%>
                         <h3 style="margin-top: 40px;">Catálogo de Videojuegos</h3>
                         <table class="styled-table">
                             <thead>
                                 <tr>
+                                    <th>ID</th> 
                                     <th>Nombre</th>
                                     <th>Plataforma</th>
                                     <th>Formato</th>
-                                    <th>Costo/Día</th>
+                                    <th>Costo</th>
                                     <th>Stock</th>
                                     <th>Acción</th>
                                 </tr>
@@ -168,15 +164,12 @@
                                             boolean disponible = p.getStock() > 0;
                                 %>
                                 <tr>
+                                    <td style="color: #6B7280; font-family: monospace;"><strong>#<%= p.getId()%></strong></td>
                                     <td><strong><%= p.getNombre()%></strong></td>
                                     <td><%= ((Videojuego) p).getPlataforma()%></td>
                                     <td><%= p.getFormato()%></td>
                                     <td>$<%= String.format("%.2f", p.getCostoDia())%></td>
-                                    <td>
-                                        <span class="<%= disponible ? "stock-ok" : "stock-none"%>">
-                                            <%= p.getStock()%> uds
-                                        </span>
-                                    </td>
+                                    <td><span class="<%= disponible ? "stock-ok" : "stock-none"%>"><%= p.getStock()%> uds</span></td>
                                     <td>
                                         <form action="AlquilerServlet" method="POST" style="margin: 0;">
                                             <input type="hidden" name="idProd" value="<%= p.getId()%>">
@@ -187,7 +180,7 @@
                                     </td>
                                 </tr>
                                 <% }
-                                    }%>
+                                }%>
                             </tbody>
                         </table>
                     </div>
