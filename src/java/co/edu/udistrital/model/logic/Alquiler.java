@@ -19,28 +19,31 @@ public class Alquiler {
 
     private int id;
     private String idCliente;
-    private int idProducto; // Mapea a INT en la BD
+    private int idProducto; 
     private LocalDate fechaAlquiler;
-    private String estado; // ACTIVO, DEVUELTO
+    private double costo;
+    private String estado; 
 
     /**
      * Constructor completo para recuperar del historial.
      */
-    public Alquiler(int id, String idCliente, int idProducto, LocalDate fechaAlquiler, String estado) {
+    public Alquiler(int id, String idCliente, int idProducto, LocalDate fechaAlquiler, double costo, String estado) {
         this.id = id;
         this.idCliente = idCliente;
         this.idProducto = idProducto;
         this.fechaAlquiler = fechaAlquiler;
+        this.costo = costo;
         this.estado = estado;
     }
 
     /**
      * Constructor para nuevos registros.
      */
-    public Alquiler(String idCliente, int idProducto) {
+    public Alquiler(String idCliente, int idProducto, double costo) {
         this.idCliente = idCliente;
         this.idProducto = idProducto;
         this.fechaAlquiler = LocalDate.now();
+        this.costo = costo;
         this.estado = "ACTIVO";
     }
 
@@ -74,6 +77,14 @@ public class Alquiler {
 
     public void setFechaAlquiler(LocalDate fechaAlquiler) {
         this.fechaAlquiler = fechaAlquiler;
+    }
+
+    public double getCosto() {
+        return costo;
+    }
+
+    public void setCosto(double costo) {
+        this.costo = costo;
     }
 
     public String getEstado() {

@@ -347,7 +347,7 @@
                             <td><%= a.getIdCliente()%></td>
                             <td><%= a.getIdProducto()%></td>
                             <td><%= a.getFechaAlquiler()%></td>
-                            <td>$<%= a.getCostoTotal()%></td>
+                            <td>$<%= a.getCosto()%></td>
                             <td class="status-<%= a.getEstado().toLowerCase()%>"><%= a.getEstado()%></td>
                         </tr>
                         <% }%>

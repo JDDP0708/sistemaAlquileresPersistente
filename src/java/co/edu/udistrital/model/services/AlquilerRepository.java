@@ -22,12 +22,13 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
     @Override
     public boolean add(Alquiler entity) {
         // SQL ajustado a las 5 columnas de la BD
-        String sql = "INSERT INTO alquileres (id_cliente, id_producto, fecha_alquiler, estado) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO alquileres (id_cliente, id_producto, fecha_alquiler, costo, estado) VALUES (?, ?, ?, ?, ?)";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, entity.getIdCliente());
             ps.setInt(2, entity.getIdProducto());
             ps.setDate(3, Date.valueOf(entity.getFechaAlquiler()));
-            ps.setString(4, entity.getEstado());
+            ps.setDouble(4, entity.getCosto());
+            ps.setString(5, entity.getEstado());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error BD Add Alquiler: " + e.getMessage());
@@ -53,6 +54,7 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
                             rs.getString("id_cliente"),
                             rs.getInt("id_producto"),
                             rs.getDate("fecha_alquiler").toLocalDate(),
+                            rs.getDouble("costo"),
                             rs.getString("estado")
                     ));
                 }
@@ -74,6 +76,7 @@ public class AlquilerRepository extends BareRepository<Alquiler> {
                         rs.getString("id_cliente"),
                         rs.getInt("id_producto"),
                         rs.getDate("fecha_alquiler").toLocalDate(),
+                        rs.getDouble("costo"),
                         rs.getString("estado")
                 ));
             }

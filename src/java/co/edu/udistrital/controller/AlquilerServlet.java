@@ -76,7 +76,7 @@ public class AlquilerServlet extends HttpServlet {
                     prodRepo.update(producto);
 
                     // Se envía el Alquiler con las columnas disponibles
-                    Alquiler nuevoAlquiler = new Alquiler(cliente.getUsuario(), producto.getId());
+                    Alquiler nuevoAlquiler = new Alquiler(cliente.getUsuario(), producto.getId(), totalPagar);
 
                     if (alqRepo.add(nuevoAlquiler)) {
                         session.setAttribute("usuarioLogueado", cliente);
